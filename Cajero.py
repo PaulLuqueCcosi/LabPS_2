@@ -6,6 +6,13 @@ class Cajero:
         self.user = None
         self.isLogin = False
         self.maxNnumberAttemps = 3
+
+    def inputAmount (self, operation):
+        try:
+            amount = float(input(f'Ingrese el monto a {operation}'))
+            return amount
+        except ValueError:
+            print('Error. Ingresa valores numericos.')
         
     def login(self):
         numAttemp = 1
@@ -82,9 +89,7 @@ class Cajero:
             "3" : "Ver Saldo",
             "4" : "Salir",
         }
-        
-        os.system("cls")   #esto es solo para windows
-        
+                
         inputStr = None
         mount = None
         
@@ -100,7 +105,7 @@ class Cajero:
                 continue
             
             # correcto 
-            mount = inputAmount(options[inputStr])
+            mount = self.inputAmount(options[inputStr])
             break
             
         if(inputStr == "1"):

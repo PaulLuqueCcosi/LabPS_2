@@ -24,13 +24,6 @@ from DATA import data
 #   }
 
 
-def inputAmount (operation):
-  try:
-    amount = float(input(f'Ingrese el monto a {operation}'))
-    return amount
-  except ValueError:
-    print('Error. Ingresa valores numericos.')
-
 
 
 
