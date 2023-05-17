@@ -1,10 +1,4 @@
 import json
-# def openBD():
-#     with open("./UsersBD.json", "r") as archivo:
-#         data = json.load(archivo)
-#         return data
-
-
 
 class User:
   
@@ -12,6 +6,7 @@ class User:
     self.userName = userName
     self.password = password
     self.amount = amount
+    self.depositoPermitido = 3000
     
   def getUserName(self):
     return self.userName
@@ -22,9 +17,9 @@ class User:
   def getAmount(self): 
     return self.amount
   
-  def saveChanges(self):
+  def saveChanges(self, fileName = "UsersBD.json"):
     ## guarda en el json
-    with open("./UsersBD.json", "r") as archivo:
+    with open(fileName, "r") as archivo:
         data = json.load(archivo)
         archivo.close()
     
@@ -34,14 +29,13 @@ class User:
             user["amount"] = self.amount
             break
     
-    with open("./UsersBD.json", "w") as archivo:
+    with open(fileName, "w") as archivo:
         json.dump(data, archivo)
         archivo.close()
     
   @classmethod
-  def searchUser(cls, username, password):
-    #  = openBD()
-    with open("./UsersBD.json", "r") as archivo:
+  def searchUser(cls, username, password, fileName = "UsersBD.json"):
+    with open(fileName, "r") as archivo:
         dataUsers = json.load(archivo)
     
     retorno = None

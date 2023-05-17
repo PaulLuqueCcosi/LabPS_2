@@ -1,21 +1,24 @@
 from User import User
-
+import MENSAJES
 class Cajero:   
   
     def __init__(self):
         self.user = None
         self.isLogin = False
         self.maxNnumberAttemps = 3
+        self.maximoMontoDeposito = 3000
+        self.maximoMontoRetiro = 3000
+        self.topeDeposito = False
 
     def inputAmount (self, operation):
         amount = None
         try:
             amount = float(input(f'Ingrese el monto a {operation}: '))
             if(amount <= 0):
-                print("ERROR: ingrese el monto positivo")
+                print(MENSAJES.ERROR_MONTO_NEGATIVO)
                 amount = None
         except ValueError:
-            print('Error. Ingresa valores numericos.')
+            print(MENSAJES.ERROR_VALOR_NO_NUMERICO)
 
         return amount
 
@@ -30,8 +33,8 @@ class Cajero:
                 
             # ERROR
             if(user == None):
-                print("ERROR: Usuario o contrasena incorrecto")
-                print(f"Le quedan {self.maxNnumberAttemps - numAttemp}") 
+                print(MENSAJES.ERROR_USUARIO_PASSWORD_NO_ENCONTRADO)
+                print(f"Le quedan {self.maxNnumberAttemps - numAttemp} intentos") 
                 numAttemp += 1
             else:
                 # susario correcto
@@ -40,22 +43,41 @@ class Cajero:
                 break
                 
         if(self.user):
-            print(f"Bienvenido {self.user.userName}")
+            print(f"BIENVENIDO {self.user.userName}")
             return True
         else:
-            print("ERROR: A excedido los intentos, no podra realizar operaciones.")
+            print(MENSAJES.ERROR_NUMERO_INTENTOS_LOGIN)
             return False
 
     def depositar(self, monto):
-        # deposito
-        self.user.amount += monto
-        self.user.saveChanges()
+        
+        if(monto > self.maximoMontoDeposito):
+            print(MENSAJES.ERROR_TOPE_DEPOSITO)
+            return 
+        
+        if(self.user.depositoPermitido - monto >= 0):
+            # deposito
+            self.user.amount += monto
+            self.user.depositoPermitido -= monto
+            self.user.saveChanges()
+        else:
+            print(MENSAJES.ERROR_TOPE_DEPOSITO_DIA)
+            return 
+            
     
     def retirar(self, monto):
+        # si el no excedemos el limite de retiro del cajero
+    
+        if(self.maximoMontoRetiro < monto):
+            print(MENSAJES.ERROR_TOPE_RETIRO_CAJERO)
+            return
+
+
+        
         # el monto no es posible de retirar
         if(self.user.amount < monto):
             # podemos usar throws para salzar una exception
-            print("ERROR: SALDO INSUFICIENTE EN LA CUENTA")
+            print(MENSAJES.ERROR_SALDO_INSUFICIENTE)
             return
         
         # retirando 
@@ -90,7 +112,7 @@ class Cajero:
             inputStr = input("Ingrese su opcion: ")
             
             if (not (inputStr in options.keys())):
-                print(f"ERROR: '{inputStr}' no es una opcion valida")
+                print(MENSAJES.ERROR_OPCION_NO_VALIDA)
                 continue
                 
             if(inputStr == "1"):
