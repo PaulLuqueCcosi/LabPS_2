@@ -8,17 +8,23 @@ class Cajero:
         self.maxNnumberAttemps = 3
 
     def inputAmount (self, operation):
+        amount = None
         try:
-            amount = float(input(f'Ingrese el monto a {operation}'))
-            return amount
+            amount = float(input(f'Ingrese el monto a {operation}: '))
+            if(amount <= 0):
+                print("ERROR: ingrese el monto positivo")
+                amount = None
         except ValueError:
             print('Error. Ingresa valores numericos.')
+
+        return amount
+
         
     def login(self):
         numAttemp = 1
         while(numAttemp <= self.maxNnumberAttemps):
-            userName = str(input("Username: "))
-            password = int(input("Password: "))
+            userName = input("Username: ")
+            password = input("Password: ")
 
             user = User.searchUser(userName, password)
                 
@@ -34,50 +40,32 @@ class Cajero:
                 break
                 
         if(self.user):
-            print(f"Bienvenido {self.userName}")
+            print(f"Bienvenido {self.user.userName}")
             return True
         else:
             print("ERROR: A excedido los intentos, no podra realizar operaciones.")
             return False
 
     def depositar(self, monto):
-        # verificamos si ya se inicio sesion
-        # if(not self.isLogin):
-        #     print("ERROR: NO LOGEADO")
-        #     return
-        
         # deposito
         self.user.amount += monto
-        self.user.saveChange()
+        self.user.saveChanges()
     
-    def retiro(self, monto):
-        # verificamos si ya se inicio sesion
-        # if(not self.isLogin):
-        #     print("NO LOGEADO")
-        #     return
-        
+    def retirar(self, monto):
         # el monto no es posible de retirar
         if(self.user.amount < monto):
             # podemos usar throws para salzar una exception
-            print("NO SE TIENE ESE DINERO EN AL CUENTA")
+            print("ERROR: SALDO INSUFICIENTE EN LA CUENTA")
             return
         
-        # Retiro
-        print(f"Su monto actual es de {self.user.amount}")
-        print(f"Retiro {monto}")
-        
         # retirando 
+        print("Retirando el monto")
         self.user.amount -= monto
         self.user.saveChanges()
         print(f"Su cuenta actual es de {self.user.amount}")
 
-    def ver(self):
-        # verificamos si ya se inicio sesion
-        # if(not self.isLogin):
-        #     print("NO LOGEADO")
-        #     return
-        
-        print(f"Su saldo es: " , self.monto)
+    def ver(self):        
+        print(f"Su saldo es: " , self.user.amount)
 
     def salir(self):
         print("SALIR")
@@ -93,27 +81,34 @@ class Cajero:
         inputStr = None
         mount = None
         
-        
-        for number, opcion in options.items():
-            print(f"{number}. {opcion}")
-        
-        while(True):
-            inputStr = input("Ingrese su opcion: ")
-            
-            if (not (inputStr in options.keys())):
-                print(f"ERROR: '{inputStr}' no es una opcion valida")
-                continue
-            
-            # correcto 
-            mount = self.inputAmount(options[inputStr])
-            break
-            
-        if(inputStr == "1"):
-            self.depositar(mount)
-        elif(inputStr == "2"):
-            self.retirar(mount)
-        elif(inputStr == "3"):
-            self.ver()
-        else:
-            self.salir()
-        
+        while True:
+            print("MENU: ")
+            for number, opcion in options.items():
+                print(f"{number}. {opcion}")
+
+            while(True):
+                inputStr = input("Ingrese su opcion: ")
+                
+                if (not (inputStr in options.keys())):
+                    print(f"ERROR: '{inputStr}' no es una opcion valida")
+                    continue
+                
+                # correcto 
+                break
+                
+            if(inputStr == "1"):
+                mount = self.inputAmount(options[inputStr])
+                if(mount == None):
+                    continue
+                self.depositar(mount)
+            elif(inputStr == "2"):
+                mount = self.inputAmount(options[inputStr])
+                if(mount == None):
+                    continue
+                self.retirar(mount)
+            elif(inputStr == "3"):
+                self.ver()
+            else:
+                break
+        print ("================================")
+
