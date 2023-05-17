@@ -86,15 +86,12 @@ class Cajero:
             for number, opcion in options.items():
                 print(f"{number}. {opcion}")
 
-            while(True):
-                inputStr = input("Ingrese su opcion: ")
-                
-                if (not (inputStr in options.keys())):
-                    print(f"ERROR: '{inputStr}' no es una opcion valida")
-                    continue
-                
-                # correcto 
-                break
+            # while(True):
+            inputStr = input("Ingrese su opcion: ")
+            
+            if (not (inputStr in options.keys())):
+                print(f"ERROR: '{inputStr}' no es una opcion valida")
+                continue
                 
             if(inputStr == "1"):
                 mount = self.inputAmount(options[inputStr])

@@ -1,8 +1,8 @@
 import json
-def openBD():
-    with open("./UsersBD.json", "r") as archivo:
-        data = json.load(archivo)
-        return data
+# def openBD():
+#     with open("./UsersBD.json", "r") as archivo:
+#         data = json.load(archivo)
+#         return data
 
 
 
@@ -26,6 +26,7 @@ class User:
     ## guarda en el json
     with open("./UsersBD.json", "r") as archivo:
         data = json.load(archivo)
+        archivo.close()
     
     # Buscamos al usuario
     for user in data["dataUsers"]:
@@ -35,7 +36,7 @@ class User:
     
     with open("./UsersBD.json", "w") as archivo:
         json.dump(data, archivo)
-  	
+        archivo.close()
     
   @classmethod
   def searchUser(cls, username, password):
@@ -47,5 +48,7 @@ class User:
     for userItem in dataUsers["dataUsers"]:
         if userItem["userName"] == username and userItem["pass"] == password:  # Verificar la contraseña
             retorno = User(username, password, userItem["amount"])
+    
+    archivo.close()
     return retorno
         
