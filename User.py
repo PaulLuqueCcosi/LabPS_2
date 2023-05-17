@@ -12,6 +12,9 @@ class User:
   def getPassword(self):
     return self.password
   
+  def getAmount(self): 
+    return self.amount
+  
   def saveChanges(self):
     ## guarda en el dicc
     pass
