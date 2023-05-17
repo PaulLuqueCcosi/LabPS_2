@@ -17,8 +17,8 @@ class Cajero:
     def login(self):
         numAttemp = 1
         while(numAttemp <= self.maxNnumberAttemps):
-            userName = input("Username: ")
-            password = input("Password: ")
+            userName = str(input("Username: "))
+            password = int(input("Password: "))
 
             user = User.searchUser(userName, password)
                 

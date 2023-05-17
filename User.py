@@ -1,4 +1,10 @@
+import json
+def openBD():
+  with open('./UsersBD.json') as file:
+    dataUsers = json.load(file)
+    return dataUsers
 
+dataUsers = openBD()
 class User:
   
   def __init__ (self, userName, password, amount):
@@ -17,16 +23,16 @@ class User:
   
   def saveChanges(self):
     ## guarda en el dicc
-    pass
+    dataUsers["userName"]['amount'] = self.amount
   	
     
   @classmethod
   def searchUser(cls, username, password):
     # TODO: verificar si existe un usuario en el dicc
     # retuen, devuelve El user o None.
-    for key, value in data.items():
-      if key == username:
-        return User(key,  value["pass"], value["monto"])
-      else:
-        return None
-          
+    
+    print(dataUsers["dataUsers"][1])
+    if dataUsers["dataUsers"]["userName"] == username and dataUsers["dataUsers"]["userName"]["pass"] == password:  # Verificar la contraseña
+        return User(dataUsers["userName"], dataUsers["userName"]["pass"])
+    return None
+        
